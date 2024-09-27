@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
+const imagemin = require('gulp-imagemin');
 
 //compilação do sass
 function styles() {
@@ -8,7 +9,13 @@ function styles() {
         .pipe(gulp.dest('./dist/css')); //aqui ele diz onde será o destino da pasta comprimida
 }
 
-exports.default = styles;
-exports.watch =function() {
+function images() {
+    return gulp.src('./src/images/**/*') 
+        .pipe(imagemin())
+        .pipe(gulp.dest('./dist/images')); 
+}
+
+exports.default = gulp.parallel(styles, images);
+exports.watch = function() {
     gulp.watch('./src/styles/*.scss', gulp.parallel(styles)) //funcao criada para observar mudancas feitas nos arquivos scss assim executando a compilaçao do sass paralelamente.
 }
